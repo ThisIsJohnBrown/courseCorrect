@@ -1,0 +1,40 @@
+<body>
+    <head>
+        <style>
+            .tee-group {
+                width: 23vw;
+                float: left;
+                border: solid royalblue 1px;
+                margin: 5px;
+            }
+            .curr-value{
+              font-size: 48px;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <fieldset>
+            <legend>global updates</legend>
+            <input class="js-go-min-global" type="button" value="go to min">
+            <input class="js-go-max-global" type="button" value="go to max">
+        </fieldset>
+      <div class="tee-groups">
+        <div class="tee-group" data-index="0">
+            <div class="curr-value js-curr-value">50</div>
+            <input type="range" min="0" max="100" step="1" class="js-slider" onchange="changeRange(this)">
+            <fieldset>
+                <legend>go to values</legend>
+                <input class="js-go-min" type="button" value="go to min">
+                <input class="js-go-max" type="button" value="go to max">
+            </fieldset>
+            <fieldset>
+                <legend>save values</legend>
+                <input class="js-save-min" type="button" value="set as min">
+                <input class="js-save-max" type="button" value="set as max">
+            </fieldset>
+        </div>
+        </div>
+    </body>
+    <script src="main.js"></script>
+</body>
