@@ -15,25 +15,43 @@ port.on('data', function (data) {
     console.log(data.toString('utf8'));
 });
 
-const jsonData = fse.readJsonSync('./41.json');
-let currStates = jsonData;
+let currStates = fse.readJsonSync('./41.json');
 
-const servoMin = 150;
-const servoMax = 600;
+const servoMin = 200;
+const servoMax = 550;
 const servoDiff = servoMax - servoMin;
 
 app.post('/update', function (req, res) {
-    console.log(req.body);
     currStates = req.body;
     sendCurr();
     res.send(req.body);
 })
 
 function sendCurr() {
-    const data = currStates.map(x => {
-        return Math.floor(servoMin + (x.curr/100) * servoDiff)
+    let tick = 0;
+    let data = currStates.map(x => {
+        return Math.floor(servoMin + (servoDiff * (currStates[tick++].curr / 100)));
     });
-    port.write(data.toString() + ';');
+    data.unshift(0);
+
+    tick = 0;
+    let data2 = currStates.map(x => {
+        return Math.floor(servoMin + (servoDiff * (1 - (currStates[tick++].curr / 100))));
+    });
+    data2.unshift(1);
+
+    tick = 0;
+    let data3 = currStates.map(x => {
+        return Math.floor(servoMin + (servoDiff * (1 - (currStates[tick++].curr / 100))) - 1);
+    });
+    data3.unshift(2);
+    console.log("Data sent");
+    console.log(data.toString() + ',;');
+    port.write(data.toString() + ',;');
+    // console.log(data2.toString() + ',;');
+    // port.write(data2.toString() + ',;');
+    // console.log(data3.toString() + ',;');
+    // port.write(data3.toString() + ',;');
 }
 
 var tick = 0;
@@ -46,7 +64,7 @@ function animate() {
     sendCurr();
 }
 
-// setInterval(animate, 100);
+// setInterval(animate, 1000);
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
